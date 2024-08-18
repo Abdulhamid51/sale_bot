@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7!-!0w7h)&d+6^2g(onwp*6)^2@syvf+*u@=8ujanfk#4xv_@&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
 
 CRONJOBS = [
-    ('*/1 * * * *', 'main.cronjobs.create_client'),
+    ('* * * * *', 'main.cronjobs.notify_clients'),
 ]
 
 
