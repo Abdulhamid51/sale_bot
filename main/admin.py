@@ -8,10 +8,15 @@ admin.site.site_header = _("Администрирование")
 admin.site.site_title = _("Администрирование")
 admin.site.index_title = _("")
 
+@admin.register(Tarif)
+class TarifAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active_display', 'payment_date', 'user', 'phone', 'created_date')
-    list_filter = ('user',)
+    list_display = ('name', 'tarif', 'is_active_display', 'payment_date', 'user', 'phone', 'created_date')
+    list_filter = ('user', 'tarif')
     search_fields = ('name',)
 
     @admin.display(description='Оплачено')
