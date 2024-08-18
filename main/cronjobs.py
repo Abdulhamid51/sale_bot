@@ -28,3 +28,6 @@ def notify_clients():
     clients_three_days_after = Client.objects.filter(payment_date=three_days_after)
     for client in clients_three_days_after:
         send_telegram_message(client.user.last_name, f'До оплаты осталось 3 дня!\n\nКлиент: {client.name}\nТелефон: {client.phone}\nДата платежа: {client.payment_date}')
+
+if __name__ == '__main__':
+    notify_clients()
