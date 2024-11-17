@@ -1,6 +1,18 @@
 from django.db import models
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
+# Unregister the original User model
+admin.site.unregister(User)
+
+# Extend UserAdmin to add custom fields
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    fieldsets = (
+        (None, {'fields': ('username', 'first_name', 'last_name', 'password', 'is_active', 'is_staff')}),
+    )
 
 class Tarif(models.Model):
     name = models.CharField("Название тарифа", max_length=250)

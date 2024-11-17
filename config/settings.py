@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = ['https://bot-be-top.uz']
 
 # Application definition
 
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
 
 
 CRONJOBS = [
-    ('* * * * *', 'main.cronjobs.notify_clients'),
+    ('* 2 * * *', 'main.cronjobs.notify_clients'),
 ]
 
 
