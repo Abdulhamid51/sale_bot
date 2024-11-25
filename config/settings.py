@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
 
 CRONJOBS = [
-    ('* 2 * * *', 'main.cronjobs.notify_clients'),
+    ('0 2 * * *', 'main.cronjobs.notify_clients'),
 ]
 
 
