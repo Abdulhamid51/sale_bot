@@ -16,6 +16,7 @@ class UserAdmin(BaseUserAdmin):
 
 class Tarif(models.Model):
     name = models.CharField("Название тарифа", max_length=250)
+    like = models.IntegerField("Лайков", default=0)
 
     def __str__(self):
         return self.name
