@@ -10,7 +10,7 @@ admin.site.index_title = _("")
 
 @admin.register(Tarif)
 class TarifAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'like', 'coverage', 'saved', 'views', 'publication')
     search_fields = ('name',)
 
 @admin.register(Client)
