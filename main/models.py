@@ -8,7 +8,7 @@ TARIF_TYPES = {
     "like": "105", # Лайков
     "coverage": "106", # Охват
     "views": "5", # Просмотров
-    "saves": "99", # Сохраненные
+    "saved": "99", # Сохраненные
 }
 
 # Unregister the original User model
@@ -62,6 +62,7 @@ class Client(models.Model):
     
 
 class Order(models.Model):
+    date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     order_id = models.CharField(max_length=200)
     service_id = models.CharField(max_length=20)
     url = models.CharField(max_length=1000)
@@ -69,6 +70,8 @@ class Order(models.Model):
     remains = models.CharField(max_length=200)
     status = models.CharField(max_length=200)
     charge = models.CharField(max_length=200)
+    publication = models.CharField(max_length=200, blank=True, null=True)
+    for_test = models.BooleanField(default=False)
     
     def __str__(self):
         return self.order_id
