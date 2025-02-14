@@ -8,9 +8,14 @@ admin.site.site_header = _("Администрирование")
 admin.site.site_title = _("Администрирование")
 admin.site.index_title = _("")
 
+@admin.register(ApiKey)
+class ApiKeyAdmin(admin.ModelAdmin):
+    list_display = ('user', 'key')
+    search_fields = ('user',)
+
 @admin.register(Tarif)
 class TarifAdmin(admin.ModelAdmin):
-    list_display = ('name', 'like', 'coverage', 'saved', 'views', 'publication', 'speed')
+    list_display = ('name', 'like', 'like_speed', 'coverage', 'coverage_speed', 'saved', 'saved_speed', 'views', 'publication')
     search_fields = ('name',)
 
 @admin.register(Client)
@@ -27,4 +32,4 @@ class ClientAdmin(admin.ModelAdmin):
             return format_html('<span style="color: red;">&#x2718;</span>')
 
 admin.site.unregister(Group)
-admin.site.register(Order)
+# admin.site.register(Order)

@@ -7,17 +7,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
+    <div id="error" class="mt-5 container">
+        <div class="alert alert-primary fade show" role="alert">
+            User not found !
+        </div>
+    </div>
+    <div class="container" id="main_content">
 
         <ul class="nav nav-pills mt-3">
             <li class="nav-item">
                 <a class="nav-link active" href="#">Создать новый</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="orders.html">Заказы</a>
+                <a class="nav-link" href="orders/">Заказы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="tests.html">Тесты</a>
+                <a class="nav-link" href="test_orders/">Тесты</a>
             </li>
         </ul>
 
@@ -50,6 +55,8 @@
 
                 {% csrf_token %}
 
+                <input type="hidden" id="telegram_id" name="telegram_id">
+
                 <select name="tarif_id" id="tarif_select" class="form-select" required>
                     <option label="Выберите тариф"></option>
                     {% for t in tarifs %}
@@ -61,9 +68,14 @@
                     <li>Охват - </li>
                     <li>Сохраненные - </li>
                     <li>Просмотров - </li>
-                    <li>Скорость - </li>
                     <li>Публикаций - </li>
                 </ul>
+                <select name="client_id" id="" class="form-select mb-3" required>
+                    <option label="Выберите клиент"></option>
+                    {% for c in clients %}
+                    <option value="{{c.id}}">{{c.name}}</option>
+                    {% endfor %}
+                </select>
                 <select name="publication" class="form-select mb-3" required>
                     <option value="off">На публикацию</option>
                     <option value="on">Автоматически</option>
@@ -97,6 +109,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
     <script>
         $('#tarif_select').change(function(){
@@ -108,6 +121,21 @@
                     $('#tarif_info').html(response)
                 }
             })
+        })
+
+        const tg = window.Telegram.WebApp;
+        const userId = tg.initDataUnsafe.user.id;
+        $('#telegram_id').val(userId)
+        $('#error').hide()
+        $.ajax({
+            url: 'check_telegram_user/' + userId,
+            method: 'get',
+            success: function(res){
+                if(res['success'] === false){
+                    $('#main_content').hide()
+                    $('#error').show()
+                }
+            }
         })
     </script>
 </body>

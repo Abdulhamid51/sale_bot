@@ -24,11 +24,13 @@ class UserAdmin(BaseUserAdmin):
 class Tarif(models.Model):
     name = models.CharField("Название тарифа", max_length=250)
     like = models.IntegerField("Лайков", default=0)
+    like_speed = models.IntegerField("Скорость. Лайков", default=0)
     coverage = models.IntegerField("Охват", default=0)
+    coverage_speed = models.IntegerField("Скорость. Охват", default=0)
     saved = models.IntegerField("Сохраненные", default=0)
+    saved_speed = models.IntegerField("Скорость. Сохраненные", default=0)
     views = models.IntegerField("Просмотров", default=0)
     publication = models.IntegerField("Публикаций", default=0)
-    speed = models.IntegerField("Скорость", default=0)
 
     def __str__(self):
         return self.name
@@ -63,15 +65,24 @@ class Client(models.Model):
 
 class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    order_id = models.CharField(max_length=200)
-    service_id = models.CharField(max_length=20)
-    url = models.CharField(max_length=1000)
-    count = models.CharField(max_length=200)
-    remains = models.CharField(max_length=200)
-    status = models.CharField(max_length=200)
-    charge = models.CharField(max_length=200)
-    publication = models.CharField(max_length=200, blank=True, null=True)
+    tarif = models.ForeignKey(Tarif, on_delete=models.SET_NULL, blank=True, null=True)
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
+    orders = models.TextField(blank=True, null=True)
     for_test = models.BooleanField(default=False)
-    
+
+    @property
+    def count_orders(self):
+        orders = self.orders.split(',')
+        return orders.__len__()-1
+
+
+class ApiKey(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    key = models.TextField()
+
     def __str__(self):
-        return self.order_id
+        return self.key
+
+    class Meta:
+        verbose_name = "API-ключ"
+        verbose_name_plural = "API-ключи"
