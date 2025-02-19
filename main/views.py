@@ -76,7 +76,10 @@ def create_order(request):
             test = True
             publication = 'off'
         tarif = Tarif.objects.get(id=tarif_id)
-        client = Client.objects.get(id=client_id)
+        if client_id:
+            client = Client.objects.get(id=client_id)
+        else:
+            client = None
 
         orders = ''
 

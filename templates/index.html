@@ -70,7 +70,7 @@
                     <li>Просмотров - </li>
                     <li>Публикаций - </li>
                 </ul>
-                <select name="client_id" id="" class="form-select mb-3" required>
+                <select name="client_id" id="" class="form-select mb-3">
                     <option label="Выберите клиент"></option>
                     {% for c in clients %}
                     <option value="{{c.id}}">{{c.name}}</option>
