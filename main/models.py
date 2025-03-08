@@ -9,6 +9,7 @@ TARIF_TYPES = {
     "coverage": "106", # Охват
     "views": "5", # Просмотров
     "saved": "99", # Сохраненные
+    "jap_views": "793", # Просмотров
 }
 
 # Unregister the original User model
@@ -29,8 +30,6 @@ class Tarif(models.Model):
     coverage_speed = models.IntegerField("Скорость. Охват", default=0)
     saved = models.IntegerField("Сохраненные", default=0)
     saved_speed = models.IntegerField("Скорость. Сохраненные", default=0)
-    views = models.IntegerField("Просмотров", default=0)
-    publication = models.IntegerField("Публикаций", default=0)
 
     def __str__(self):
         return self.name
@@ -68,17 +67,28 @@ class Order(models.Model):
     tarif = models.ForeignKey(Tarif, on_delete=models.SET_NULL, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
     orders = models.TextField(blank=True, null=True)
+    jap_orders = models.TextField(blank=True, null=True)
     for_test = models.BooleanField(default=False)
+    publication = models.IntegerField("Публикаций", default=0)
 
     @property
     def count_orders(self):
-        orders = self.orders.split(',')
+        orders = self.orders.split(',') if self.orders else ','
         return orders.__len__()-1
+
+    @property
+    def count_jap_orders(self):
+        orders = self.jap_orders.split(',') if self.jap_orders else ','
+        return orders.__len__()-1
+
+    def __str__(self):
+        return self.tarif.name if self.tarif else f'{self.date}'
 
 
 class ApiKey(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    key = models.TextField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь", blank=True, null=True)
+    key = models.TextField("venro.ru")
+    jap_key = models.TextField("justanotherpanel.com", blank=True, null=True)
 
     def __str__(self):
         return self.key

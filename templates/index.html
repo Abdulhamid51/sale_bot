@@ -67,21 +67,18 @@
                     <li>Лайков - </li>
                     <li>Охват - </li>
                     <li>Сохраненные - </li>
-                    <li>Просмотров - </li>
-                    <li>Публикаций - </li>
                 </ul>
-                <select name="client_id" id="" class="form-select mb-3">
-                    <option label="Выберите клиент"></option>
-                    {% for c in clients %}
-                    <option value="{{c.id}}">{{c.name}}</option>
-                    {% endfor %}
-                </select>
-                <select name="publication" class="form-select mb-3" required>
+
+                <select name="publication" class="form-select mb-3" id="publication" required>
                     <option value="off">На публикацию</option>
                     <option value="on">Автоматически</option>
                 </select>
-                <input type="text" name="link" class="form-control" placeholder="Ссылка">
-                <div class="checkbox mt-3">
+                <input type="number" id="p_count" name="publication_count" class="form-control mb-3" placeholder="Количество постов" style="display: none;">
+                <input type="number" name="views_count" class="form-control mb-3" placeholder="Количество просмотров" required>
+                <input type="number" name="views_loop" class="form-control mb-3" placeholder="Количество циклов" required>
+
+                <input type="text" name="link" class="form-control mb-3" placeholder="Ссылка" required>
+                <div class="checkbox mb-3">
                     <input class="form-check-input" type="checkbox" name="test">
                     <label class="form-check-label" for="flexCheckDefault">
                         Для теста
@@ -114,13 +111,30 @@
     <script>
         $('#tarif_select').change(function(){
             let id = $(this).val()
-            $.ajax({
-                url: `tarif_component/${id}/`,
-                method: 'get',
-                success: function(response){
-                    $('#tarif_info').html(response)
-                }
-            })
+            if(id){
+                $.ajax({
+                    url: `tarif_component/${id}/`,
+                    method: 'get',
+                    success: function(response){
+                        $('#tarif_info').html(response)
+                    }
+                })
+            }else{
+                $('#tarif_info').html(`
+                    <li>Лайков - </li>
+                    <li>Охват - </li>
+                    <li>Сохраненные - </li>
+                `)
+            }
+        })
+
+        $('#publication').change(function(){
+            let value = $(this).val()
+            if(value === 'on'){
+                $('#p_count').show()
+            }else{
+                $('#p_count').hide()
+            }
         })
 
         const tg = window.Telegram.WebApp;
