@@ -15,7 +15,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
 
 @admin.register(Tarif)
 class TarifAdmin(admin.ModelAdmin):
-    list_display = ('name', 'like', 'like_speed', 'coverage', 'coverage_speed', 'saved', 'saved_speed')
+    list_display = ('name', 'like', 'like_speed', 'coverage', 'coverage_speed', 'saved', 'saved_speed', 'views')
     search_fields = ('name',)
 
 @admin.register(Client)
@@ -32,4 +32,4 @@ class ClientAdmin(admin.ModelAdmin):
             return format_html('<span style="color: red;">&#x2718;</span>')
 
 admin.site.unregister(Group)
-admin.site.register(Order)
+# admin.site.register(Order)

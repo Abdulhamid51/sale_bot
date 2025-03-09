@@ -30,6 +30,7 @@ class Tarif(models.Model):
     coverage_speed = models.IntegerField("Скорость. Охват", default=0)
     saved = models.IntegerField("Сохраненные", default=0)
     saved_speed = models.IntegerField("Скорость. Сохраненные", default=0)
+    views = models.IntegerField("Просмотров", default=0)
 
     def __str__(self):
         return self.name
