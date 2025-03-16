@@ -9,7 +9,9 @@ TARIF_TYPES = {
     "coverage": "106", # Охват
     "views": "5", # Просмотров
     "saved": "99", # Сохраненные
-    "jap_views": "793", # Просмотров
+    "repost": "147", # Репост
+    "jap_views1": "793", # Просмотров
+    "jap_views2": "442", # Просмотров
 }
 
 # Unregister the original User model
@@ -31,6 +33,8 @@ class Tarif(models.Model):
     saved = models.IntegerField("Сохраненные", default=0)
     saved_speed = models.IntegerField("Скорость. Сохраненные", default=0)
     views = models.IntegerField("Просмотров", default=0)
+    repost = models.IntegerField("Репост", default=0)
+    repost_speed = models.IntegerField("Скорость. Репост", default=0)
 
     def __str__(self):
         return self.name

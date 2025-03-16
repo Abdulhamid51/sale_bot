@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 import requests
 
-def jap_order_create(key, service_id, link, count, posts, old_posts, loop_count):
+def jap_order_create(key, service_id, link, count, posts, loop_count):
     loop_minutes = [10, 15, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 360, 420, 480, 540, 600]
     posts = 0 if posts == 'off' else posts
     url = 'https://justanotherpanel.com/api/v2'
@@ -18,15 +18,31 @@ def jap_order_create(key, service_id, link, count, posts, old_posts, loop_count)
             'min': count, # count of views
             'max': count, # count of views
             'posts': posts,
-            'old_posts': old_posts,
             'delay': i
         }
         response = requests.post(url, data=data)
-        print(response)
+        print(response.json())
         order_id = response.json().get('order')
         if order_id:
             orders += f'{order_id},'
     print(orders)
+    return orders
+
+def jap_default_order_create(key, service_id, link, count):
+    url = 'https://justanotherpanel.com/api/v2'
+    orders = ''
+    data = {
+        'action': 'add',
+        'key': key,
+        'service': service_id,
+        'link': link,
+        'quantity': count
+    }
+    response = requests.post(url, data=data)
+    print(response.json())
+    order_id = response.json().get('order')
+    if order_id:
+        orders += f'{order_id},'
     return orders
 
 def jap_order_delete(key, orders):
@@ -93,7 +109,7 @@ def create_order_page(request):
     return render(request, 'index.html', context)
 
 def create_order(request):
-    try:
+    # try:
         telegram_id = request.POST.get('telegram_id')
 
         user = User.objects.filter(last_name=telegram_id).last()
@@ -114,17 +130,25 @@ def create_order(request):
         client_id = request.POST.get('client_id')
         link = request.POST.get('link')
         publication = request.POST.get('publication')
-        publication_count = request.POST.get('publication_count', 0)
-        views_count = int(request.POST.get('views_count', '0'))
-        views_loop = int(request.POST.get('views_loop', '0'))
+        publication_count = request.POST.get('publication_count')
+        views_count = int(request.POST.get('views_count')) if request.POST.get('views_count') else 0
+        views_loop = int(request.POST.get('views_loop')) if request.POST.get('views_loop') else 0
+
         if views_loop > 17:
             messages.error(request, 'Views loop is more than 17 !')
             return redirect('main:create_order_page')
-        test = True if request.POST.get('test') else False
+
+        if publication == 'on':
+            publication = publication_count
+            test = False
+        else:
+            publication = 'off'
+            test = True
 
         if user.is_staff == False:
-            test = True
             publication = 'off'
+            test = True
+
         tarif = Tarif.objects.get(id=tarif_id)
 
         if client_id:
@@ -134,13 +158,6 @@ def create_order(request):
 
         orders = ''
         jap_orders = ''
-
-        if publication == 'on':
-            publication = publication_count
-            old_posts = 0
-        else:
-            publication = 'off'
-            old_posts = 1
 
         if tarif.like > 0:
             vo = venro_order_create(
@@ -178,6 +195,18 @@ def create_order(request):
             )
             if vo != False:
                 orders += f"{vo['id']},"
+                
+        if tarif.repost > 0:
+            vo = venro_order_create(
+                key=key,
+                service_id=TARIF_TYPES['repost'],
+                link=link,
+                count=tarif.repost,
+                speed=tarif.repost_speed,
+                posts=publication
+            )
+            if vo != False:
+                orders += f"{vo['id']},"
         
         if tarif.views > 0:
             vo = venro_order_create(
@@ -191,17 +220,26 @@ def create_order(request):
             if vo != False:
                 orders += f"{vo['id']},"
 
-        if views_count and views_loop > 0:
-            jo = jap_order_create(
-                key=jap_key,
-                service_id=TARIF_TYPES['jap_views'],
-                link=link,
-                count=views_count,
-                loop_count=views_loop,
-                old_posts=old_posts,
-                posts=publication
-            )
-            jap_orders = jo
+        if publication != 'off':
+            if views_count and views_loop > 0:
+                jo = jap_order_create(
+                    key=jap_key,
+                    service_id=TARIF_TYPES['jap_views1'],
+                    link=link,
+                    count=views_count,
+                    loop_count=views_loop,
+                    posts=publication
+                )
+                jap_orders = jo
+        else:
+            if tarif.views > 0:
+                jo = jap_default_order_create(
+                    key=jap_key,
+                    service_id=TARIF_TYPES['jap_views2'],
+                    link=link,
+                    count=tarif.views
+                )
+                jap_orders = jo
                 
         Order.objects.create(
             tarif=tarif,
@@ -212,9 +250,9 @@ def create_order(request):
         )
         messages.success(request, 'Заказы созданы')
         return redirect('main:create_order_page')
-    except Exception as error:
-        messages.error(request, f'Error: {error}')
-        return redirect('main:create_order_page')
+    # except Exception as error:
+    #     messages.error(request, f'Error: {error}')
+    #     return redirect('main:create_order_page')
 
 def tarif_component(request, id):
     tarif = Tarif.objects.get(id=id)
@@ -223,7 +261,7 @@ def tarif_component(request, id):
 def check_telegram_user(request, tg_id):
     user = User.objects.filter(last_name=tg_id)
     if user:
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'is_staff': user.last().is_staff})
     else:
         return JsonResponse({'success': False})
     

@@ -68,23 +68,19 @@
                     <li>Охват - </li>
                     <li>Сохраненные - </li>
                     <li>Просмотров - </li>
+                    <li>Репост - </li>
                 </ul>
 
-                <select name="publication" class="form-select mb-3" id="publication" required>
-                    <option value="off">На публикацию</option>
+                <select name="publication" class="form-select mb-3" id="publication">
+                    <option value="off">На публикацию (для теста)</option>
                     <option value="on">Автоматически</option>
                 </select>
                 <input type="number" id="p_count" name="publication_count" class="form-control mb-3" placeholder="Количество постов" style="display: none;">
-                <input type="number" name="views_count" class="form-control mb-3" placeholder="Количество просмотров" required>
-                <input type="number" name="views_loop" class="form-control mb-3" placeholder="Количество циклов" required>
+                <input type="number" id="views_count" name="views_count" class="form-control mb-3" placeholder="Количество просмотров" style="display: none;">
+                <input type="number" id="loop_count" name="views_loop" class="form-control mb-3" placeholder="Количество циклов" style="display: none;">
 
                 <input type="text" name="link" class="form-control mb-3" placeholder="Ссылка" required>
-                <div class="checkbox mb-3">
-                    <input class="form-check-input" type="checkbox" name="test">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Для теста
-                    </label>
-                </div>
+                
                 <button type="button" class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Создать</button>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -110,6 +106,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
     <script>
+
         $('#tarif_select').change(function(){
             let id = $(this).val()
             if(id){
@@ -126,6 +123,7 @@
                     <li>Охват - </li>
                     <li>Сохраненные - </li>
                     <li>Просмотров - </li>
+                    <li>Репост - </li>
                 `)
             }
         })
@@ -134,8 +132,12 @@
             let value = $(this).val()
             if(value === 'on'){
                 $('#p_count').show()
+                $('#views_count').show()
+                $('#loop_count').show()
             }else{
                 $('#p_count').hide()
+                $('#views_count').hide()
+                $('#loop_count').hide()
             }
         })
 
@@ -150,6 +152,10 @@
                 if(res['success'] === false){
                     $('#main_content').hide()
                     $('#error').show()
+                }else{
+                    if(res['is_staff'] === false){
+                        $('#publication').attr('disabled', 'disabled');
+                    }
                 }
             }
         })
