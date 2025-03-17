@@ -15,7 +15,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
 
 @admin.register(Tarif)
 class TarifAdmin(admin.ModelAdmin):
-    list_display = ('name', 'like', 'like_speed', 'coverage', 'coverage_speed', 'saved', 'saved_speed', 'repost', 'repost_speed', 'views')
+    list_display = ('name', 'like', 'like_speed', 'coverage', 'coverage_speed', 'saved', 'saved_speed', 'repost', 'repost_speed', 'views', 'jap_quantity', 'jap_runs', 'jap_interval')
     search_fields = ('name',)
 
 @admin.register(Client)

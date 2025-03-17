@@ -28,7 +28,7 @@ def jap_order_create(key, service_id, link, count, posts, loop_count):
     print(orders)
     return orders
 
-def jap_default_order_create(key, service_id, link, count):
+def jap_default_order_create(key, service_id, link, quantity, runs, interval):
     url = 'https://justanotherpanel.com/api/v2'
     orders = ''
     data = {
@@ -36,7 +36,9 @@ def jap_default_order_create(key, service_id, link, count):
         'key': key,
         'service': service_id,
         'link': link,
-        'quantity': count
+        'quantity': quantity,
+        'runs': runs,
+        'interval': interval
     }
     response = requests.post(url, data=data)
     print(response.json())
@@ -109,7 +111,7 @@ def create_order_page(request):
     return render(request, 'index.html', context)
 
 def create_order(request):
-    # try:
+    try:
         telegram_id = request.POST.get('telegram_id')
 
         user = User.objects.filter(last_name=telegram_id).last()
@@ -237,7 +239,9 @@ def create_order(request):
                     key=jap_key,
                     service_id=TARIF_TYPES['jap_views2'],
                     link=link,
-                    count=tarif.views
+                    quantity=tarif.jap_quantity,
+                    runs=tarif.jap_runs,
+                    interval=tarif.jap_interval
                 )
                 jap_orders = jo
                 
@@ -250,9 +254,9 @@ def create_order(request):
         )
         messages.success(request, 'Заказы созданы')
         return redirect('main:create_order_page')
-    # except Exception as error:
-    #     messages.error(request, f'Error: {error}')
-    #     return redirect('main:create_order_page')
+    except Exception as error:
+        messages.error(request, f'Error: {error}')
+        return redirect('main:create_order_page')
 
 def tarif_component(request, id):
     tarif = Tarif.objects.get(id=id)

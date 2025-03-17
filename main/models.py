@@ -33,6 +33,9 @@ class Tarif(models.Model):
     saved = models.IntegerField("Сохраненные", default=0)
     saved_speed = models.IntegerField("Скорость. Сохраненные", default=0)
     views = models.IntegerField("Просмотров", default=0)
+    jap_quantity = models.IntegerField("Quantity JAP", default=0)
+    jap_runs = models.IntegerField("Runs JAP", default=0)
+    jap_interval = models.IntegerField("Interval (in minutes) JAP", default=0)
     repost = models.IntegerField("Репост", default=0)
     repost_speed = models.IntegerField("Скорость. Репост", default=0)
 

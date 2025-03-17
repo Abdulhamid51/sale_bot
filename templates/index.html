@@ -69,6 +69,11 @@
                     <li>Сохраненные - </li>
                     <li>Просмотров - </li>
                     <li>Репост - </li>
+                    <div id="jap_settings">
+                        <li>Quantity - </li>
+                        <li>Runs - </li>
+                        <li>Interval (in minutes) - </li>
+                    </div>
                 </ul>
 
                 <select name="publication" class="form-select mb-3" id="publication">
@@ -124,6 +129,11 @@
                     <li>Сохраненные - </li>
                     <li>Просмотров - </li>
                     <li>Репост - </li>
+                    <div id="jap_settings">
+                        <li>Quantity - </li>
+                        <li>Runs - </li>
+                        <li>Interval (in minutes) - </li>
+                    </div>
                 `)
             }
         })
@@ -134,10 +144,12 @@
                 $('#p_count').show()
                 $('#views_count').show()
                 $('#loop_count').show()
+                $('#jap_settings').hide()
             }else{
                 $('#p_count').hide()
                 $('#views_count').hide()
                 $('#loop_count').hide()
+                $('#jap_settings').show()
             }
         })
 
