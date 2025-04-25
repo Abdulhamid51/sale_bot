@@ -50,7 +50,7 @@
             
         </div>
         
-        <div class="mt-3">
+        <div class="mt-3" style="margin-bottom: 200px;">
             <form action="create_order/" method="post">
 
                 {% csrf_token %}
@@ -120,6 +120,11 @@
                     method: 'get',
                     success: function(response){
                         $('#tarif_info').html(response)
+                        if($('#publication').val() === 'on'){
+                            $('#jap_settings').hide()
+                        }else{
+                            $('#jap_settings').show()
+                        }
                     }
                 })
             }else{
@@ -129,11 +134,6 @@
                     <li>Сохраненные - </li>
                     <li>Просмотров - </li>
                     <li>Репост - </li>
-                    <div id="jap_settings">
-                        <li>Quantity - </li>
-                        <li>Runs - </li>
-                        <li>Interval (in minutes) - </li>
-                    </div>
                 `)
             }
         })

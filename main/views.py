@@ -247,6 +247,7 @@ def create_order(request):
                 
         Order.objects.create(
             tarif=tarif,
+            link=link,
             client=client,
             orders=orders,
             jap_orders=jap_orders,

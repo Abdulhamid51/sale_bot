@@ -74,6 +74,7 @@ class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     tarif = models.ForeignKey(Tarif, on_delete=models.SET_NULL, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
+    link = models.TextField(blank=True, null=True)
     orders = models.TextField(blank=True, null=True)
     jap_orders = models.TextField(blank=True, null=True)
     for_test = models.BooleanField(default=False)
