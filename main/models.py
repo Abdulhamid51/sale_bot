@@ -21,7 +21,7 @@ admin.site.unregister(User)
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'first_name', 'last_name', 'password', 'is_active', 'is_staff')}),
+        (None, {'fields': ('username', 'first_name', 'last_name', 'password', 'is_active', 'is_staff', 'is_superuser')}),
     )
 
 class Tarif(models.Model):
@@ -71,6 +71,7 @@ class Client(models.Model):
     
 
 class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     tarif = models.ForeignKey(Tarif, on_delete=models.SET_NULL, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
@@ -79,6 +80,7 @@ class Order(models.Model):
     jap_orders = models.TextField(blank=True, null=True)
     for_test = models.BooleanField(default=False)
     publication = models.IntegerField("Публикаций", default=0)
+    finished = models.BooleanField(default=False)
 
     @property
     def count_orders(self):

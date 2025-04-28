@@ -1,5 +1,6 @@
 from .models import *
 import requests
+from .views import venro_orders_check
 
 TELEGRAM_BOT_TOKEN = '7537240849:AAFs2eNrst2_n90t3iDW2G8d3s7n1Yz6F3g'
 TELEGRAM_API_URL = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
@@ -34,3 +35,21 @@ def notify_clients():
 
 if __name__ == '__main__':
     notify_clients()
+
+
+def finished_orders_send():
+    orders = Order.objects.filter(finished=False, for_test=False)
+    key = ApiKey.objects.get(id=1)
+    staff = User.objects.filter(is_superuser=True).first()
+    print(staff.username)
+    for i in orders:
+        checks = venro_orders_check(key.key, i.orders)
+        if not checks.get('error'):
+            completed_count = sum(1 for item in checks.values() if item.get("status") in ['Completed', 'Stopped', 'Canceled'])
+            if completed_count == i.count_orders:
+                i.finished = True
+                i.save()
+                send_telegram_message(staff.last_name, f'Посты закончились!\n\nСсылка: {i.link}\nЗаказы ID: {i.orders}')
+                if i.user:
+                    send_telegram_message(i.user.last_name, f'Посты закончились!\n\nСсылка: {i.link}\nЗаказы ID: {i.orders}')
+

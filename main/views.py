@@ -88,15 +88,15 @@ def venro_order_delete(key, orders):
     response = requests.post(url, data=data)
     print(response.json())
     
-def venro_order_check(order_id):
+def venro_orders_check(key, orders):
     url = 'https://venro.ru/api/orders'
     data = {
         'action': 'check',
-        'key': ApiKey.objects.last().key,
-        'id': order_id
+        'key': key,
+        'orders': orders
     }
     response = requests.post(url, data=data)
-    if response.json().get('url'):
+    if response.json():
         return response.json()
     else:
         return False
@@ -246,6 +246,7 @@ def create_order(request):
                 jap_orders = jo
                 
         Order.objects.create(
+            user=request.user,
             tarif=tarif,
             link=link,
             client=client,
@@ -299,3 +300,7 @@ def delete_order(request):
     order.delete()
     messages.success(request, 'Заказ отменен')
     return redirect(request.META.get('HTTP_REFERER', '/app/'))
+
+
+# from .cronjobs import finished_orders_send
+# finished_orders_send()
