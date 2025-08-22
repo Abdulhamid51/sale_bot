@@ -2,7 +2,7 @@ from .models import *
 import requests
 from .views import venro_orders_check
 
-TELEGRAM_BOT_TOKEN = '7537240849:AAFs2eNrst2_n90t3iDW2G8d3s7n1Yz6F3g'
+TELEGRAM_BOT_TOKEN = '7537240849:AAGGpKnTea3iYllWtPcDblBOwk0Ljd0RviQ'
 TELEGRAM_API_URL = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
 
 def send_telegram_message(chat_id, message):
@@ -19,7 +19,7 @@ def send_telegram_message(chat_id, message):
 def notify_clients():
     today = timezone.now().date()
     three_days_after = today + timezone.timedelta(days=3)
-    staff = User.objects.filter(is_superuser=True).last()
+    staff = User.objects.filter(is_superuser=True).first()
 
     # Filter clients with payment_date equal to today
     clients_today = Client.objects.filter(payment_date=today)

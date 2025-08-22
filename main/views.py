@@ -246,7 +246,7 @@ def create_order(request):
                 jap_orders = jo
                 
         Order.objects.create(
-            user=request.user,
+            user=user,
             tarif=tarif,
             link=link,
             client=client,
@@ -272,11 +272,11 @@ def check_telegram_user(request, tg_id):
         return JsonResponse({'success': False})
     
 def orders(request):
-    orders = Order.objects.filter(for_test=False).order_by('-id')
+    orders = Order.objects.filter(for_test=False).order_by('-id')[:100]
     return render(request, 'orders.html', {'orders': orders})
     
 def test_orders(request):
-    orders = Order.objects.filter(for_test=True).order_by('-id')
+    orders = Order.objects.filter(for_test=True).order_by('-id')[:100]
     return render(request, 'tests.html', {'orders': orders})
 
 def delete_order(request):
