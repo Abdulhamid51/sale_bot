@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 TARIF_TYPES = {
-    "like": "105", # Лайков
+    "like": "156", # Лайков
     "coverage": "106", # Охват
     "views": "5", # Просмотров
     "saved": "99", # Сохраненные
