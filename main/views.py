@@ -164,7 +164,7 @@ def create_order(request):
         if tarif.like > 0:
             vo = venro_order_create(
                 key=key,
-                service_id=TARIF_TYPES['like'],
+                service_id=TarifCodes.objects.last().like, #TARIF_TYPES['like'],
                 link=link,
                 count=tarif.like,
                 speed=tarif.like_speed,
@@ -177,7 +177,7 @@ def create_order(request):
         if tarif.coverage > 0:
             vo = venro_order_create(
                 key=key,
-                service_id=TARIF_TYPES['coverage'],
+                service_id=TarifCodes.objects.last().coverage, #TARIF_TYPES['coverage'],
                 link=link,
                 count=tarif.coverage,
                 speed=tarif.coverage_speed,
@@ -189,7 +189,7 @@ def create_order(request):
         if tarif.saved > 0:
             vo = venro_order_create(
                 key=key,
-                service_id=TARIF_TYPES['saved'],
+                service_id=TarifCodes.objects.last().saved, #TARIF_TYPES['saved'],
                 link=link,
                 count=tarif.saved,
                 speed=tarif.saved_speed,
@@ -201,7 +201,7 @@ def create_order(request):
         if tarif.repost > 0:
             vo = venro_order_create(
                 key=key,
-                service_id=TARIF_TYPES['repost'],
+                service_id=TarifCodes.objects.last().repost, #TARIF_TYPES['repost'],
                 link=link,
                 count=tarif.repost,
                 speed=tarif.repost_speed,
@@ -213,7 +213,7 @@ def create_order(request):
         if tarif.views > 0:
             vo = venro_order_create(
                 key=key,
-                service_id=TARIF_TYPES['views'],
+                service_id=TarifCodes.objects.last().views, #TARIF_TYPES['views'],
                 link=link,
                 count=tarif.views,
                 speed=0,
@@ -226,7 +226,7 @@ def create_order(request):
             if views_count and views_loop > 0:
                 jo = jap_order_create(
                     key=jap_key,
-                    service_id=TARIF_TYPES['jap_views1'],
+                    service_id=TarifCodes.objects.last().jap_views1, #TARIF_TYPES['jap_views1'],
                     link=link,
                     count=views_count,
                     loop_count=views_loop,
@@ -237,7 +237,7 @@ def create_order(request):
             if tarif.views > 0:
                 jo = jap_default_order_create(
                     key=jap_key,
-                    service_id=TARIF_TYPES['jap_views2'],
+                    service_id=TarifCodes.objects.last().jap_views2, #TARIF_TYPES['jap_views2'],
                     link=link,
                     quantity=tarif.jap_quantity,
                     runs=tarif.jap_runs,
