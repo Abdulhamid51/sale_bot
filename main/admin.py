@@ -36,4 +36,5 @@ class ClientAdmin(admin.ModelAdmin):
             return format_html('<span style="color: red;">&#x2718;</span>')
 
 admin.site.unregister(Group)
+admin.site.register(TarifCodes)
 # admin.site.register(Order)
