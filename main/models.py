@@ -14,6 +14,20 @@ TARIF_TYPES = {
     "jap_views2": "442", # Просмотров
 }
 
+class TarifCodes(models.Model):
+    like = models.CharField('Лайков', max_length=20)
+    coverage = models.CharField('Охват', max_length=20)
+    views = models.CharField('Просмотров', max_length=20)
+    saved = models.CharField('Сохраненные', max_length=20)
+    repost = models.CharField('Репост', max_length=20)
+    jap_views1 = models.CharField('Просмотров JAP 1', max_length=20)
+    jap_views2 = models.CharField('Просмотров JAP 2', max_length=20)
+
+    class Meta:
+        verbose_name = "Тариф код"
+        verbose_name_plural = "Тариф код"
+
+
 # Unregister the original User model
 admin.site.unregister(User)
 
