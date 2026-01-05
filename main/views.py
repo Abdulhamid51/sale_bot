@@ -221,6 +221,18 @@ def create_order(request):
             )
             if vo != False:
                 orders += f"{vo['id']},"
+        
+        if tarif.views_2 > 0:
+            vo = venro_order_create(
+                key=key,
+                service_id=TarifCodes.objects.last().views_2, #TARIF_TYPES['views'],
+                link=link,
+                count=tarif.views_2,
+                speed=tarif.views_2_speed,
+                posts=publication
+            )
+            if vo != False:
+                orders += f"{vo['id']},"
 
         if publication != 'off':
             if views_count and views_loop > 0:
@@ -234,7 +246,7 @@ def create_order(request):
                 )
                 jap_orders = jo
         else:
-            if tarif.views > 0:
+            if tarif.jap_quantity > 0:
                 jo = jap_default_order_create(
                     key=jap_key,
                     service_id=TarifCodes.objects.last().jap_views2, #TARIF_TYPES['jap_views2'],
