@@ -30,10 +30,11 @@ class ClientAdmin(admin.ModelAdmin):
 
     @admin.display(description='Оплачено')
     def is_active_display(self, obj):
-        if obj.is_active:
-            return format_html('<span style="color: green;">&#x2714;</span>')
-        else:
-            return format_html('<span style="color: red;">&#x2718;</span>')
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            'green' if obj.is_active else 'red',
+            '✔' if obj.is_active else '✘'
+        )
 
 admin.site.unregister(Group)
 admin.site.register(TarifCodes)
